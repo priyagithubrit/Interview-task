@@ -31,4 +31,27 @@ public function store(Request $request)
     return redirect()->route('items.create')->with('success', 'Items saved successfully.');
 }
 
+public function edit(Item $item)
+{
+    $items = Item::latest()->get();
+    return view('items.create', compact('item', 'items'));
+}
+
+public function update(Request $request, Item $item)
+{
+    $request->validate([
+        'name' => 'required|string',
+        'quantity' => 'required|integer|min:1',
+    ]);
+
+    $item->update($request->only('name', 'quantity'));
+    return redirect()->route('items.create')->with('success', 'Item updated successfully.');
+}
+
+public function destroy(Item $item)
+{
+    $item->delete();
+    return redirect()->route('items.create')->with('success', 'Item deleted successfully.');
+}
+
 }
